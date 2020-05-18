@@ -1,6 +1,7 @@
 package links
 
 import (
+	"fmt"
 	"net/http"
 
 	crawler "not_your_fathers_search_engine/services/crawler"
@@ -25,6 +26,7 @@ func SearchLink(w http.ResponseWriter, r *http.Request) {
 
 	// might need to change it up later and instead only call
 	// cockroach or elasticsearch
+	fmt.Println("GETS HERE")
 	crawler.StartCrawlProcess("https://heatchek.io")
 	return
 }

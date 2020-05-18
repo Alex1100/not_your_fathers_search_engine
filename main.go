@@ -16,11 +16,11 @@ func setupServeMux() http.Handler {
 	apiController := controllers.NewApiController()
 	mux := gmux.NewRouter()
 
-	mux.PathPrefix("/").Handler(http.FileServer(http.Dir("./static/public")))
-	http.Handle("/", mux)
 	mux.HandleFunc("/link", apiController.LinkResource.SearchLink).Methods("GET")
 	mux.HandleFunc("/link", apiController.LinkResource.UpsertLink).Methods("POST")
 
+	mux.PathPrefix("/").Handler(http.FileServer(http.Dir("./static/public")))
+	http.Handle("/", mux)
 	return mux
 }
 
