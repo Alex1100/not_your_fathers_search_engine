@@ -6,7 +6,6 @@ import (
 
 // WORK IN PROGRESS
 
-
 type AppController struct {
 	LinkResource *links.LinkResource
 }
