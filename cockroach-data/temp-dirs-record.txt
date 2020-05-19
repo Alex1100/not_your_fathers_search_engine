@@ -1,0 +1,1 @@
+/Users/alexanderaleksanyan/code/go/src/not_your_fathers_search_engine/cockroach-data/cockroach-temp486278149

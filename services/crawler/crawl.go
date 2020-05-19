@@ -89,7 +89,7 @@ func crawl(url string) []string {
 	return list
 }
 
-func StartCrawlProcess(srcURL string) {
+func StartCrawlProcess(srcURL string) []string {
 	worklist := make(chan []string)  // lists of URL's, may have dups
 	unseenLinks := make(chan string) // deduped URL's
 	// Add command-line args to worklist
@@ -114,17 +114,21 @@ func StartCrawlProcess(srcURL string) {
 	// The main goroutine dedups worklist items
 	// and sends the unseen ones to the crawlers
 	seen := make(map[string]bool)
+	linkCollection := make([]string, 0)
 	for list := range worklist {
 		for _, link := range list {
 			if len(seen) >= 100 {
 				fmt.Println("SIZE OF LINKS FOUND ARE: ", len(seen))
-				return
+				return linkCollection
 			}
 
 			if !seen[link] && !strings.Contains(link, "localhost") {
 				seen[link] = true
+				linkCollection = append(linkCollection, link)
 				unseenLinks <- link
 			}
 		}
 	}
+
+	return linkCollection
 }

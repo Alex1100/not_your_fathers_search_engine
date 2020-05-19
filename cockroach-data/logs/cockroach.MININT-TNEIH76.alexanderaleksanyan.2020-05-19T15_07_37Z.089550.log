@@ -1,0 +1,30 @@
+I200519 15:07:37.575659 1 util/log/clog.go:1203  [config] file created at: 2020/05/19 15:07:37
+I200519 15:07:37.575659 1 util/log/clog.go:1203  [config] running on machine: MININT-TNEIH76
+I200519 15:07:37.575659 1 util/log/clog.go:1203  [config] binary: CockroachDB CCL v19.2.6 (x86_64-apple-darwin14, built 2020/04/06 17:59:37, go1.12.12)
+I200519 15:07:37.575659 1 util/log/clog.go:1203  [config] arguments: [cockroach start]
+I200519 15:07:37.575659 1 util/log/clog.go:1203  line format: [IWEF]yymmdd hh:mm:ss.uuuuuu goid file:line msg utf8=✓
+I200519 15:07:37.575657 1 cli/start.go:1140  logging to directory /Users/alexanderaleksanyan/code/go/src/not_your_fathers_search_engine/cockroach-data/logs
+W200519 15:07:37.577035 1 cli/start.go:1048  Using the default setting for --cache (128 MiB).
+  A significantly larger value is usually needed for good performance.
+  If you have a dedicated server a reasonable setting is --cache=.25 (8.0 GiB).
+W200519 15:07:37.577087 1 cli/start.go:1061  Using the default setting for --max-sql-memory (128 MiB).
+  A significantly larger value is usually needed in production.
+  If you have a dedicated server a reasonable setting is --max-sql-memory=.25 (8.0 GiB).
+I200519 15:07:37.577183 1 cli/start.go:1196  CockroachDB CCL v19.2.6 (x86_64-apple-darwin14, built 2020/04/06 17:59:37, go1.12.12)
+W200519 15:07:37.681097 1 cli/start.go:507  running 'cockroach start' without --join is deprecated.
+Consider using 'cockroach start-single-node' or 'cockroach init' instead.
+I200519 15:07:37.681917 1 server/config.go:394  system total memory: 32 GiB
+I200519 15:07:37.681967 1 server/config.go:396  server configuration:
+max offset             500000000
+cache size             128 MiB
+SQL memory pool size   128 MiB
+scan interval          10m0s
+scan min idle time     10ms
+scan max idle time     1s
+event log enabled      true
+I200519 15:07:37.682030 1 cli/start.go:1033  process identity: uid 501 euid 501 gid 20 egid 20
+I200519 15:07:37.683612 1 cli/start.go:640  starting cockroach node
+E200519 15:07:37.755635 1 cli/error.go:233  cannot load certificates.
+Check your certificate settings, set --certs-dir, or use --insecure for insecure clusters.
+
+failed to start server: problem with CA certificate: not found

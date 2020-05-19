@@ -4,32 +4,30 @@ import (
 	"fmt"
 	"net/http"
 
+	cockroach "not_your_fathers_search_engine/services/linkgraph/store/cockroach_db"
 	crawler "not_your_fathers_search_engine/services/crawler"
 )
 
 // WORK IN PROGRESS
 
-type LinkResource struct {
-	SearchLink func (http.ResponseWriter, *http.Request)
-	UpsertLink func (http.ResponseWriter, *http.Request)
+type CockroachDBGraph struct {
+	db *cockroach.CockroachDBGraph
 }
 
-func NewLinkResource() *LinkResource {
-	return &LinkResource{
-		SearchLink: SearchLink,
-		UpsertLink: UpsertLink,
-	}
+func ExtendDBLinks(db *cockroach.CockroachDBGraph) *CockroachDBGraph {
+	return &CockroachDBGraph{db: db}
 }
 
-func SearchLink(w http.ResponseWriter, r *http.Request) {
+func (db *CockroachDBGraph) SearchLink(w http.ResponseWriter, r *http.Request) {
 	// make a call to the link graph in memory service here
 
 	// might need to change it up later and instead only call
 	// cockroach or elasticsearch
-	crawler.StartCrawlProcess("https://heatchek.io")
+	links := crawler.StartCrawlProcess("https://heatchek.io")
+	fmt.Println("LINKS ARE: ", links)
 	return
 }
 
-func UpsertLink(w http.ResponseWriter, r *http.Request) {
+func (db *CockroachDBGraph) UpsertLink(w http.ResponseWriter, r *http.Request) {
 	return
 }

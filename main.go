@@ -12,12 +12,11 @@ import (
 
 // WORK IN PROGRESS
 
-func setupServeMux() http.Handler {
-	apiController := controllers.NewApiController()
+func setupServeMux(rootController *controllers.CockRoachDataBase) http.Handler {
 	mux := gmux.NewRouter()
 
-	mux.HandleFunc("/link", apiController.LinkResource.SearchLink).Methods("GET")
-	mux.HandleFunc("/link", apiController.LinkResource.UpsertLink).Methods("POST")
+	mux.HandleFunc("/link", rootController.SearchLink).Methods("GET")
+	mux.HandleFunc("/link", rootController.UpsertLink).Methods("POST")
 
 	mux.PathPrefix("/").Handler(http.FileServer(http.Dir("./static/public")))
 	http.Handle("/", mux)
@@ -26,8 +25,11 @@ func setupServeMux() http.Handler {
 
 
 func main() {
-	mux := setupServeMux()
-	
+	rootController := controllers.ExposeDB()
+	defer rootController.DB.DB.Close()
+
+	mux := setupServeMux(rootController)
+	defer
 	fmt.Println("Listening on: ", 3010)
 
 	log.Fatal(http.ListenAndServe(":3010", mux))
