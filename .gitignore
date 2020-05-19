@@ -3,3 +3,4 @@ certs_safe
 node1
 node2
 node3
+cockroach_data
