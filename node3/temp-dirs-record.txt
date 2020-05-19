@@ -1,1 +1,0 @@
-/Users/alexanderaleksanyan/code/go/src/not_your_fathers_search_engine/node3/cockroach-temp560198886
