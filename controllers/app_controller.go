@@ -16,7 +16,7 @@ type CockRoachDataBase struct {
 }
 
 func ExposeDB() *CockRoachDataBase {
-	dsn := "postgresql://root@localhost:26257/not_your_fathers_search_engine?ssl=true&sslmode=require&sslrootcert=certs/ca.crt&sslkey=certs/client.maxroach.key&sslcert=certs/client.maxroach.crt"
+	dsn := "postgresql://root@localhost:26257/not_your_fathers_search_engine?ssl=true&sslmode=require&sslrootcert=certs/ca.crt&sslkey=certs/client.root.key&sslcert=certs/client.root.crt"
 	cdb, err := cockroach_db.NewCockroachDbGraph(dsn)
 	if err != nil {
 		log.Fatal("DB NOT CONNECTED: %s", err)

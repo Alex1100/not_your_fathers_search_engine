@@ -3,6 +3,7 @@ package cockroach_db
 import (
 	"database/sql"
 	"time"
+	"fmt"
 
 	"not_your_fathers_search_engine/services/linkgraph/graph"
 	"github.com/google/uuid"
@@ -37,6 +38,7 @@ func (c *CockroachDBGraph) Close() error {
 // UpsertLink creates a new link or updates an existing link.
 func (c *CockroachDBGraph) UpsertLink(link *graph.Link) error {
 	row := c.DB.QueryRow(db_queries.upsertLinkQuery, link.URL, link.RetrievedAt.UTC())
+	fmt.Println("ROW IS: ", row)
 	if err := row.Scan(&link.ID, &link.RetrievedAt); err != nil {
 		return xerrors.Errorf("upsert link: %w", err)
 	}

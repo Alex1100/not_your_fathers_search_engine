@@ -3,8 +3,12 @@ package links
 import (
 	"fmt"
 	"net/http"
+	"github.com/google/uuid"
+	"time"
+	"log"
 
 	cockroach "not_your_fathers_search_engine/services/linkgraph/store/cockroach_db"
+	graph "not_your_fathers_search_engine/services/linkgraph/graph"
 	crawler "not_your_fathers_search_engine/services/crawler"
 )
 
@@ -19,12 +23,33 @@ func ExtendDBLinks(db *cockroach.CockroachDBGraph) *CockroachDBGraph {
 }
 
 func (db *CockroachDBGraph) SearchLink(w http.ResponseWriter, r *http.Request) {
-	// make a call to the link graph in memory service here
+	fmt.Println("HTTP srcURL IS: ", r.URL.Query().Get("srcURL"))
+	srcURL := r.URL.Query().Get("srcURL")
+	if len(srcURL) == 0 {
+		fmt.Println("NO srcURL PROVIDED")
+		return
+	}
 
-	// might need to change it up later and instead only call
-	// cockroach or elasticsearch
-	links := crawler.StartCrawlProcess("https://heatchek.io")
-	fmt.Println("LINKS ARE: ", links)
+	links := crawler.StartCrawlProcess(srcURL)
+	// linksGraph := make([]*graph.Link, 0)
+	for _, link := range links {
+		id, err := uuid.NewRandom()
+		if err != nil {
+			log.Fatalf("uuid.NewV4() failed with %s\n", err)
+		}
+		linkGraph := &graph.Link{
+			ID: id,
+			URL: link,
+			RetrievedAt: time.Now(),
+		}
+		err = db.db.UpsertLink(linkGraph)
+		
+		if err != nil {
+			fmt.Println("Epic failure, you should probably look into it: ", err)
+		}
+	}
+	// need to save links in cockroach_db here
+	fmt.Println("LINKS STORED/REFRESHED")
 	return
 }
 

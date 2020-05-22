@@ -117,8 +117,7 @@ func StartCrawlProcess(srcURL string) []string {
 	linkCollection := make([]string, 0)
 	for list := range worklist {
 		for _, link := range list {
-			if len(seen) >= 100 {
-				fmt.Println("SIZE OF LINKS FOUND ARE: ", len(seen))
+			if len(seen) >= 1000 {
 				return linkCollection
 			}
 

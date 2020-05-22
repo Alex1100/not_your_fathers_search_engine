@@ -1,6 +1,4 @@
 certs
-certs_safe
-node1
-node2
-node3
-cockroach_data
+certs-safe
+node*
+cockroach-data
