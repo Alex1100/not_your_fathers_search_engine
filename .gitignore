@@ -2,3 +2,5 @@ certs
 certs-safe
 node*
 cockroach-data
+config/.env.*
+.env
