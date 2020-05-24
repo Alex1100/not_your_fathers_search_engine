@@ -1,7 +1,6 @@
 package config
 
-var projectID string = "not-your-fathers-search-engine"
-var upsertLinkTopicID string = "upsert_link"
+import "os"
 
 type Topics struct {
 	UpsertLink string
@@ -9,7 +8,7 @@ type Topics struct {
 
 type PubSubConfig struct {
 	ProjectID string
-	Topics *Topics
+	Topics    *Topics
 }
 
 type Config struct {
@@ -19,9 +18,9 @@ type Config struct {
 func ReadConfig() *Config {
 	return &Config{
 		&PubSubConfig{
-			ProjectID: projectID,
-			Topics: &Topics {
-				UpsertLink: upsertLinkTopicID,
+			ProjectID: os.Getenv("project_id"),
+			Topics: &Topics{
+				UpsertLink: os.Getenv("upsert_link_topic_id"),
 			},
 		},
 	}

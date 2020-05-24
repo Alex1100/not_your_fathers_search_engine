@@ -9,7 +9,6 @@ import (
 	cockroach_db "not_your_fathers_search_engine/pkg/services/linkgraph/store/cockroach_db"
 )
 
-// WORK IN PROGRESS
 type CockRoachDataBase struct {
 	DB *cockroach_db.CockroachDBGraph
 }
