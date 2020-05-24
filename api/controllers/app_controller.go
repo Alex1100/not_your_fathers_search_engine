@@ -3,6 +3,7 @@ package controllers
 import (
 	"log"
 	"net/http"
+	"os"
 
 	links "not_your_fathers_search_engine/api/controllers/links"
 	cockroach_db "not_your_fathers_search_engine/pkg/services/linkgraph/store/cockroach_db"
@@ -14,8 +15,8 @@ type CockRoachDataBase struct {
 }
 
 func ExposeDB() *CockRoachDataBase {
-	dsn := "postgresql://root@localhost:26257/not_your_fathers_search_engine?ssl=true&sslmode=require&sslrootcert=certs/ca.crt&sslkey=certs/client.root.key&sslcert=certs/client.root.crt"
-	cdb, err := cockroach_db.NewCockroachDbGraph(dsn)
+	dbConnectionString := os.Getenv("db_link")
+	cdb, err := cockroach_db.NewCockroachDbGraph(dbConnectionString)
 	if err != nil {
 		log.Fatal("DB NOT CONNECTED: %s", err)
 	}
