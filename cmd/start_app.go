@@ -31,7 +31,7 @@ func selectConfigFile() string {
 	}
 	currentEnv := os.Getenv("env")
 
-	if currentEnv == "development" {   
+	if currentEnv == "development" {
 		env += ".development"
 	} else if currentEnv == "production" {
 		env += ".production"
@@ -53,7 +53,7 @@ func InitializeApp() {
 func StartApp() {
 	projectId := os.Getenv("project_id")
 
-	// Prints out username environment variable
+	// Prints out projectId environment variable
 	fmt.Println(projectId)
 
 	rootController := controllers.ExposeDB()
