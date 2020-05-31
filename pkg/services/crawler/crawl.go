@@ -31,9 +31,9 @@ func Extract(url string) ([]string, error) {
 	if !isValidUrl(url) {
 		return nil, fmt.Errorf("url is not a valid protocol: %s", url)
 	}
-
+	fmt.Println("Calkung it: ", url)
 	networkClient := http.Client{
-		Timeout: 5 * time.Millisecond,
+		Timeout: 2000 * time.Millisecond,
 	}
 
 	resp, err := networkClient.Get(url)
@@ -72,8 +72,6 @@ func Extract(url string) ([]string, error) {
 
 func forEachNode(n *html.Node, pre, post func(n *html.Node)) {
 	if pre != nil {
-		// add go-routine and check to upsert/insert into
-		// memory and cockroachdb here
 		pre(n)
 	}
 	for c := n.FirstChild; c != nil; c = c.NextSibling {
@@ -137,7 +135,7 @@ func StartCrawlProcess(srcURL string) []byte {
 
 	for list := range worklist {
 		for _, link := range list {
-			if len(seen) >= 50 {
+			if len(seen) >= 1000 {
 				return linkCollection
 			}
 
