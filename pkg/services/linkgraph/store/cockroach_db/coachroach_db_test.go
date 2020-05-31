@@ -6,6 +6,7 @@ import (
 	"testing"
 
 	"not_your_fathers_search_engine/pkg/services/linkgraph/graph/graphtest"
+
 	gc "gopkg.in/check.v1"
 )
 
@@ -27,7 +28,7 @@ func (s *CockroachDbGraphTestSuite) SetUpSuite(c *gc.C) {
 	g, err := NewCockroachDbGraph(dsn)
 	c.Assert(err, gc.IsNil)
 	s.SetGraph(g)
-	s.db = g.db
+	s.db = g.DB
 }
 
 func (s *CockroachDbGraphTestSuite) SetUpTest(c *gc.C) {

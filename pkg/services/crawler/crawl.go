@@ -2,16 +2,14 @@ package crawler
 
 import (
 	"fmt"
-	"golang.org/x/net/html"
-
 	"log"
 	"net/http"
-	// "os"
 	"strings"
+
+	"golang.org/x/net/html"
 )
 
 // WORK IN PROGRESS
-
 
 // Extract makes an HTTP GET request to the specified URL, parses
 // the response as HTML, and returns the links in the HTML document.
@@ -79,23 +77,22 @@ func forEachNode(n *html.Node, pre, post func(n *html.Node)) {
 var tokens = make(chan struct{}, 20000)
 
 func crawl(url string) []string {
-	fmt.Println(url)
 	tokens <- struct{}{} // acquire a token
 	list, err := Extract(url)
 	<-tokens // release the tokens
+
 	if err != nil {
 		log.Print(err)
 	}
+
 	return list
 }
 
-func StartCrawlProcess(srcURL string) []string {
+func StartCrawlProcess(srcURL string) []byte {
 	worklist := make(chan []string)  // lists of URL's, may have dups
 	unseenLinks := make(chan string) // deduped URL's
-	// Add command-line args to worklist
+
 	go func() {
-		// change from getting from terminal to an api/client side request perhaps
-		// worklist <- os.Args[1:]
 		worklist <- []string{srcURL}
 	}()
 
@@ -114,17 +111,18 @@ func StartCrawlProcess(srcURL string) []string {
 	// The main goroutine dedups worklist items
 	// and sends the unseen ones to the crawlers
 	seen := make(map[string]bool)
-	linkCollection := make([]string, 0)
+	linkCollection := make([]byte, 0)
+
 	for list := range worklist {
 		for _, link := range list {
-			if len(seen) >= 5 {
+			if len(seen) >= 1000 {
 				return linkCollection
 			}
 
-			if !seen[link] && !strings.Contains(link, "localhost") {
-				seen[link] = true
-				linkCollection = append(linkCollection, link)
-				unseenLinks <- link
+			if !seen[string(link)] && !strings.Contains(string(link), "localhost") {
+				seen[string(link)] = true
+				linkCollection = append(linkCollection, []byte(string(link)+"\n\n")...)
+				unseenLinks <- string(link)
 			}
 		}
 	}

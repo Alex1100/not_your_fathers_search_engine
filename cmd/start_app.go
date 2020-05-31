@@ -5,18 +5,18 @@ import (
 	"log"
 	"net/http"
 	"os"
+
 	"github.com/joho/godotenv"
 
+	controllers "not_your_fathers_search_engine/api/controllers"
 
 	gmux "github.com/gorilla/mux"
-	controllers "not_your_fathers_search_engine/api/controllers"
 )
 
 func setupServeMux(rootController *controllers.CockRoachDataBase) http.Handler {
 	mux := gmux.NewRouter()
 
 	mux.HandleFunc("/link", rootController.SearchLink).Methods("GET")
-	mux.HandleFunc("/link", rootController.UpsertLink).Methods("POST")
 
 	mux.PathPrefix("/").Handler(http.FileServer(http.Dir("./static/public")))
 	http.Handle("/", mux)

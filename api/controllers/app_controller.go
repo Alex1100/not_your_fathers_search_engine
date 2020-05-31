@@ -27,7 +27,3 @@ func ExposeDB() *CockRoachDataBase {
 func (cdb *CockRoachDataBase) SearchLink(w http.ResponseWriter, r *http.Request) {
 	links.ExtendDBLinks(cdb.DB).SearchLink(w, r)
 }
-
-func (cdb *CockRoachDataBase) UpsertLink(w http.ResponseWriter, r *http.Request) {
-	links.ExtendDBLinks(cdb.DB).UpsertLink(w, r)
-}

@@ -1,13 +1,14 @@
-package es
+package elastic_search
 
 import (
 	"not_your_fathers_search_engine/pkg/services/text_indexer/index"
-	"github.com/elastic/go-elasticsearch"
+
+	es7 "github.com/elastic/go-elasticsearch/v7"
 )
 
 // esIterator implements index.Iterator.
 type esIterator struct {
-	es        *elasticsearch.Client
+	es        *es7.Client
 	searchReq map[string]interface{}
 
 	cumIdx uint64

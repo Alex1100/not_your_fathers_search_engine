@@ -1,18 +1,19 @@
-package es
+package elastic_search
 
 import (
 	"bytes"
 	"context"
 	"encoding/json"
 	"fmt"
+	"not_your_fathers_search_engine/pkg/services/text_indexer/index"
 	"strings"
 	"time"
 
-	"not_your_fathers_search_engine/pkg/services/text_indexer/index"
-	"github.com/elastic/go-elasticsearch"
-	"github.com/elastic/go-elasticsearch/esapi"
 	"github.com/google/uuid"
 	"golang.org/x/xerrors"
+
+	es7 "github.com/elastic/go-elasticsearch/v7"
+	esapi "github.com/elastic/go-elasticsearch/v7/esapi"
 )
 
 // The name of the elasticsearch index to use.
@@ -84,17 +85,17 @@ var _ index.Indexer = (*ElasticSearchIndexer)(nil)
 // ElasticSearchIndexer is an Indexer implementation that uses an elastic search
 // instance to catalogue and search documents.
 type ElasticSearchIndexer struct {
-	es         *elasticsearch.Client
+	es         *es7.Client
 	refreshOpt func(*esapi.UpdateRequest)
 }
 
 // NewElasticSearchIndexer creates a text indexer that uses an in-memory
 // bleve instance for indexing documents.
 func NewElasticSearchIndexer(esNodes []string, syncUpdates bool) (*ElasticSearchIndexer, error) {
-	cfg := elasticsearch.Config{
+	cfg := es7.Config{
 		Addresses: esNodes,
 	}
-	es, err := elasticsearch.NewClient(cfg)
+	es, err := es7.NewClient(cfg)
 	if err != nil {
 		return nil, err
 	}
@@ -243,7 +244,7 @@ func (i *ElasticSearchIndexer) UpdateScore(linkID uuid.UUID, score float64) erro
 	return nil
 }
 
-func ensureIndex(es *elasticsearch.Client) error {
+func ensureIndex(es *es7.Client) error {
 	mappingsReader := strings.NewReader(esMappings)
 	res, err := es.Indices.Create(indexName, es.Indices.Create.WithBody(mappingsReader))
 	if err != nil {
@@ -259,7 +260,7 @@ func ensureIndex(es *elasticsearch.Client) error {
 	return nil
 }
 
-func runSearch(es *elasticsearch.Client, searchQuery map[string]interface{}) (*esSearchRes, error) {
+func runSearch(es *es7.Client, searchQuery map[string]interface{}) (*esSearchRes, error) {
 	var buf bytes.Buffer
 	if err := json.NewEncoder(&buf).Encode(searchQuery); err != nil {
 		return nil, xerrors.Errorf("find by ID: %w", err)
