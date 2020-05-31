@@ -115,7 +115,7 @@ func StartCrawlProcess(srcURL string) []byte {
 
 	for list := range worklist {
 		for _, link := range list {
-			if len(seen) >= 1000 {
+			if len(seen) >= 50 {
 				return linkCollection
 			}
 
