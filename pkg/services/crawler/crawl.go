@@ -4,17 +4,39 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"net/url"
 	"strings"
+	"time"
 
 	"golang.org/x/net/html"
 )
 
-// WORK IN PROGRESS
+func isValidUrl(src string) bool {
+	_, err := url.ParseRequestURI(src)
+	if err != nil {
+		return false
+	}
+
+	u, err := url.Parse(src)
+	if err != nil || u.Scheme == "" || u.Host == "" {
+		return false
+	}
+
+	return true
+}
 
 // Extract makes an HTTP GET request to the specified URL, parses
 // the response as HTML, and returns the links in the HTML document.
 func Extract(url string) ([]string, error) {
-	resp, err := http.Get(url)
+	if !isValidUrl(url) {
+		return nil, fmt.Errorf("url is not a valid protocol: %s", url)
+	}
+
+	networkClient := http.Client{
+		Timeout: 5 * time.Millisecond,
+	}
+
+	resp, err := networkClient.Get(url)
 	if err != nil {
 		return nil, err
 	}
