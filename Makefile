@@ -2,6 +2,7 @@
 include .env
 export $(shell sed 's/=.//' .env)
 
+
 .PHONY: test ci-check
 
 lint: lint-check-deps
