@@ -4,3 +4,4 @@ node*
 cockroach-data
 config/.env.*
 .env
+coverage.txt
