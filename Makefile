@@ -14,9 +14,6 @@ lint: lint-check-deps
 		--exclude-use-default=false \
 		./...
 
-spit:
-	@echo ${env}
-
 test: 
 	@echo "[go test] running tests and collecting coverage metrics"
 	@go test -v -tags all_tests -race -coverprofile=coverage.txt -covermode=atomic ./...

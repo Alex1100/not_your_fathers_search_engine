@@ -13,10 +13,10 @@ import (
 	gmux "github.com/gorilla/mux"
 )
 
-func setupServeMux(rootController *controllers.CockRoachDataBase) http.Handler {
+func setupServeMux() http.Handler {
 	mux := gmux.NewRouter()
 
-	mux.HandleFunc("/link", rootController.SearchLink).Methods("GET")
+	mux.HandleFunc("/link", controllers.SearchLink).Methods("GET")
 
 	mux.PathPrefix("/").Handler(http.FileServer(http.Dir("./static/public")))
 	http.Handle("/", mux)
@@ -58,10 +58,7 @@ func StartApp() {
 	// Prints out projectId environment variable
 	fmt.Println(projectID)
 
-	rootController := controllers.ExposeDB()
-	defer rootController.DB.Close()
-
-	mux := setupServeMux(rootController)
+	mux := setupServeMux()
 	fmt.Println("Listening on: ", 3010)
 
 	log.Fatal(http.ListenAndServe(":3010", mux))

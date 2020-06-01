@@ -2,10 +2,10 @@ package config
 
 import "os"
 
-// Topics Holds the details about upsert_link_topic_id
+// Topics Holds the details about crawl_from_source_topic_id
 // and all other topics within Google Cloud Pub/Sub
 type Topics struct {
-	UpsertLink string
+	CrawlFromSource string
 }
 
 // PubSubConfig Contains details regarding configuration
@@ -26,7 +26,7 @@ func ReadConfig() *Config {
 		&PubSubConfig{
 			ProjectID: os.Getenv("project_id"),
 			Topics: &Topics{
-				UpsertLink: os.Getenv("upsert_link_topic_id"),
+				CrawlFromSource: os.Getenv("crawl_from_source_topic_id"),
 			},
 		},
 	}

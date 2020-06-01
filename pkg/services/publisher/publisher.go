@@ -12,9 +12,8 @@ import (
 
 // Publish sends a message to add to a topic on
 // Google Cloud Pub/Sub
-func Publish(w io.Writer, projectID, topicID string, payload []byte) error {
+func Publish(w io.Writer, projectID, topicID string, srcURL string) error {
 	ctx := context.Background()
-	// client, err := pubsub.NewClient(ctx, projectID)
 	client, err := pubsub.NewClient(ctx, projectID, option.WithCredentialsFile(os.Getenv("google_app_path")))
 	if err != nil {
 		return fmt.Errorf("pubsub.NewClient: %v", err)
@@ -22,7 +21,7 @@ func Publish(w io.Writer, projectID, topicID string, payload []byte) error {
 
 	t := client.Topic(topicID)
 	result := t.Publish(ctx, &pubsub.Message{
-		Data: payload,
+		Data: []byte(srcURL),
 	})
 
 	// Block until the result is returned and a server-generated
