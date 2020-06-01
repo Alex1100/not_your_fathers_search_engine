@@ -1,6 +1,6 @@
-.EXPORT_ALL_VARIABLES:
-
-CDB_DSN = postgresql://root@localhost:26257/not_your_fathers_search_engine?ssl=true&sslmode=require&sslrootcert=certs/ca.crt&sslkey=certs/client.root.key&sslcert=certs/client.root.crt
+#!make
+include .env
+export $(shell sed 's/=.//' .env)
 
 .PHONY: test ci-check
 
@@ -13,6 +13,9 @@ lint: lint-check-deps
 		-E unconvert \
 		--exclude-use-default=false \
 		./...
+
+spit:
+	@echo ${env}
 
 test: 
 	@echo "[go test] running tests and collecting coverage metrics"
