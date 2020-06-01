@@ -5,7 +5,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"not_your_fathers_search_engine/pkg/services/text_indexer/index"
+	indexer "not_your_fathers_search_engine/pkg/services/text_indexer/index"
 	"strings"
 	"time"
 
@@ -80,7 +80,7 @@ func (e esError) Error() string {
 }
 
 // Compile-time check to ensure ESIndexer implements Indexer.
-var _ index.Indexer = (*ESIndexer)(nil)
+var _ indexer.Indexer = (*ESIndexer)(nil)
 
 // ESIndexer is an Indexer implementation that uses an elastic search
 // instance to catalogue and search documents.
@@ -117,9 +117,9 @@ func NewESIndexer(esNodes []string, syncUpdates bool) (*ESIndexer, error) {
 
 // Index inserts a new document to the index or updates the index entry
 // for and existing document.
-func (i *ESIndexer) Index(doc *index.Document) error {
+func (i *ESIndexer) Index(doc *indexer.Document) error {
 	if doc.LinkID == uuid.Nil {
-		return xerrors.Errorf("index: %w", index.ErrMissingLinkID)
+		return xerrors.Errorf("index: %w", indexer.ErrMissingLinkID)
 	}
 
 	var (
@@ -148,7 +148,7 @@ func (i *ESIndexer) Index(doc *index.Document) error {
 }
 
 // FindByID looks up a document by its link ID.
-func (i *ESIndexer) FindByID(linkID uuid.UUID) (*index.Document, error) {
+func (i *ESIndexer) FindByID(linkID uuid.UUID) (*indexer.Document, error) {
 	var buf bytes.Buffer
 	query := map[string]interface{}{
 		"query": map[string]interface{}{
@@ -169,7 +169,7 @@ func (i *ESIndexer) FindByID(linkID uuid.UUID) (*index.Document, error) {
 	}
 
 	if len(searchRes.Hits.HitList) != 1 {
-		return nil, xerrors.Errorf("find by ID: %w", index.ErrNotFound)
+		return nil, xerrors.Errorf("find by ID: %w", indexer.ErrNotFound)
 	}
 
 	return mapEsDoc(&searchRes.Hits.HitList[0].DocSource), nil
@@ -177,10 +177,10 @@ func (i *ESIndexer) FindByID(linkID uuid.UUID) (*index.Document, error) {
 
 // Search the index for a particular query and return back a result
 // iterator.
-func (i *ESIndexer) Search(q index.Query) (index.Iterator, error) {
+func (i *ESIndexer) Search(q indexer.Query) (indexer.Iterator, error) {
 	var qtype string
 	switch q.Type {
-	case index.QueryTypePhrase:
+	case indexer.QueryTypePhrase:
 		qtype = "phrase"
 	default:
 		qtype = "best_fields"
@@ -303,8 +303,8 @@ func unmarshalResponse(res *esapi.Response, to interface{}) error {
 	return json.NewDecoder(res.Body).Decode(to)
 }
 
-func mapEsDoc(d *esDoc) *index.Document {
-	return &index.Document{
+func mapEsDoc(d *esDoc) *indexer.Document {
+	return &indexer.Document{
 		LinkID:    uuid.MustParse(d.LinkID),
 		URL:       d.URL,
 		Title:     d.Title,
@@ -314,7 +314,7 @@ func mapEsDoc(d *esDoc) *index.Document {
 	}
 }
 
-func makeEsDoc(d *index.Document) esDoc {
+func makeEsDoc(d *indexer.Document) esDoc {
 	// Note: we intentionally skip PageRank as we don't want updates to
 	// overwrite existing PageRank values.
 	return esDoc{
