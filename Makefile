@@ -28,4 +28,4 @@ ci-check: lint test
 
 commit: lint
 	@echo "commiting code"
-	@git send $(cm)
+	@git send $(m)
