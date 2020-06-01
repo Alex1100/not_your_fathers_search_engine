@@ -1,4 +1,4 @@
-package elastic_search
+package elasticsearch
 
 import (
 	"os"
@@ -6,6 +6,7 @@ import (
 	"testing"
 
 	"not_your_fathers_search_engine/pkg/services/text_indexer/index/indextest"
+
 	gc "gopkg.in/check.v1"
 )
 
@@ -15,7 +16,7 @@ func Test(t *testing.T) { gc.TestingT(t) }
 
 type ElasticSearchTestSuite struct {
 	indextest.SuiteBase
-	idx *ElasticSearchIndexer
+	idx *ESIndexer
 }
 
 func (s *ElasticSearchTestSuite) SetUpSuite(c *gc.C) {
@@ -24,7 +25,7 @@ func (s *ElasticSearchTestSuite) SetUpSuite(c *gc.C) {
 		c.Skip("Missing ES_NODES envvar; skipping elasticsearch-backed index test suite")
 	}
 
-	idx, err := NewElasticSearchIndexer(strings.Split(nodeList, ","), true)
+	idx, err := NewESIndexer(strings.Split(nodeList, ","), true)
 	c.Assert(err, gc.IsNil)
 	s.SetIndexer(idx)
 	s.idx = idx

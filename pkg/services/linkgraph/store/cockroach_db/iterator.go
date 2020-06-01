@@ -1,9 +1,10 @@
-package cockroach_db
+package cockroachdb
 
 import (
 	"database/sql"
 
 	"not_your_fathers_search_engine/pkg/services/linkgraph/graph"
+
 	"golang.org/x/xerrors"
 )
 

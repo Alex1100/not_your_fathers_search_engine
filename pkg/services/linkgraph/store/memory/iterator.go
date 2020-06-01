@@ -4,7 +4,6 @@ import (
 	"not_your_fathers_search_engine/pkg/services/linkgraph/graph"
 )
 
-
 type linkIterator struct {
 	s *InMemoryGraph
 
@@ -26,7 +25,7 @@ func (i *linkIterator) Link() *graph.Link {
 	// avoid data-races we acquire the read lock first and clone the link
 	i.s.mu.RLock()
 	link := new(graph.Link)
-	*link = *i.links[i.curIndex - 1]
+	*link = *i.links[i.curIndex-1]
 	i.s.mu.RUnlock()
 	return link
 }
@@ -51,7 +50,7 @@ func (i *linkIterator) Close() error {
 func (i *edgeIterator) Edge() *graph.Edge {
 	i.s.mu.RLock()
 	edge := new(graph.Edge)
-	*edge = *i.edges[i.curIndex - 1]
+	*edge = *i.edges[i.curIndex-1]
 	i.s.mu.RUnlock()
 	return edge
 }

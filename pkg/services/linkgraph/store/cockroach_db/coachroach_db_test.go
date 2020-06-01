@@ -1,4 +1,4 @@
-package cockroach_db
+package cockroachdb
 
 import (
 	"database/sql"
@@ -25,7 +25,7 @@ func (s *CockroachDbGraphTestSuite) SetUpSuite(c *gc.C) {
 		c.Skip("Missing CDB_DSN envvar; skipping cockroachdb-backed graph test suite")
 	}
 
-	g, err := NewCockroachDbGraph(dsn)
+	g, err := NewCockroachGraph(dsn)
 	c.Assert(err, gc.IsNil)
 	s.SetGraph(g)
 	s.db = g.DB

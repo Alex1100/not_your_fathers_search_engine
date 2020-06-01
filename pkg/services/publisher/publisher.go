@@ -10,8 +10,9 @@ import (
 	"google.golang.org/api/option"
 )
 
+// Publish sends a message to add to a topic on
+// Google Cloud Pub/Sub
 func Publish(w io.Writer, projectID, topicID string, payload []byte) error {
-	fmt.Println("PAYLOAD IS: ", payload)
 	ctx := context.Background()
 	// client, err := pubsub.NewClient(ctx, projectID)
 	client, err := pubsub.NewClient(ctx, projectID, option.WithCredentialsFile(os.Getenv("google_app_path")))

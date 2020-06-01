@@ -4,10 +4,10 @@ import (
 	"fmt"
 	"time"
 
-	"not_your_fathers_search_engine/pkg/services/text_indexer/index"
 	"github.com/google/uuid"
 	"golang.org/x/xerrors"
 	gc "gopkg.in/check.v1"
+	"not_your_fathers_search_engine/pkg/services/text_indexer/index"
 )
 
 // SuiteBase defines a re-usable set of index-related tests that can

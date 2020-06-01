@@ -1,21 +1,21 @@
 package memory
 
 import (
-	"not_your_fathers_search_engine/pkg/services/text_indexer/index"
 	"github.com/blevesearch/bleve"
+	"not_your_fathers_search_engine/pkg/services/text_indexer/index"
 )
 
 // bleveIterator implements index.Iterator.
 type bleveIterator struct {
-	idx       	*InMemoryBleveIndexer
-	searchReq 	*bleve.SearchRequest
+	idx       *InMemoryBleveIndexer
+	searchReq *bleve.SearchRequest
 
-	cumIdx 			uint64
-	rsIdx  			int
-	rs     			*bleve.SearchResult
+	cumIdx uint64
+	rsIdx  int
+	rs     *bleve.SearchResult
 
-	latchedDoc 	*index.Document
-	lastErr    	error
+	latchedDoc *index.Document
+	lastErr    error
 }
 
 // Close the iterator and release any allocated resources.

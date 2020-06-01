@@ -1,24 +1,26 @@
-package cockroach_db
+package cockroachdb
 
 import (
 	"not_your_fathers_search_engine/pkg/services/linkgraph/graph"
 )
 
+// Queries Includes all Queries
 type Queries struct {
-	upsertLinkQuery string
-	findLinkQuery string
+	upsertLinkQuery       string
+	findLinkQuery         string
 	linksInPartitionQuery string
-	upsertEdgeQuery string
+	upsertEdgeQuery       string
 	edgesInPartitionQuery string
 	removeStaleEdgesQuery string
 }
 
+// GetQueries Access All Queries
 func GetQueries() *Queries {
 	return &Queries{
-		upsertLinkQuery: upsertLinkQuery,
-		findLinkQuery: findLinkQuery,
+		upsertLinkQuery:       upsertLinkQuery,
+		findLinkQuery:         findLinkQuery,
 		linksInPartitionQuery: linksInPartitionQuery,
-		upsertEdgeQuery: upsertEdgeQuery,
+		upsertEdgeQuery:       upsertEdgeQuery,
 		edgesInPartitionQuery: edgesInPartitionQuery,
 		removeStaleEdgesQuery: removeStaleEdgesQuery,
 	}
@@ -32,7 +34,7 @@ var (
 	`
 	findLinkQuery = `
 		SELECT url, retrieved_at FROM links WHERE id=$1
-	`	
+	`
 	linksInPartitionQuery = `
 		SELECT id, url, retrieved_at FROM links WHERE id >= $1 AND id < $2 AND retrieved_at < $3
 	`
@@ -48,8 +50,7 @@ var (
 	removeStaleEdgesQuery = `
 		DELETE FROM edges WHERE src=$1 AND updated_at < $2
 	`
-	
-	// Compile-time check for ensuring CockroachDbGraph implements Graph.
-	_ graph.Graph = (*CockroachDBGraph)(nil)
 
+	// Compile-time check for ensuring CockroachGraph implements Graph.
+	_ graph.Graph = (*CockroachGraph)(nil)
 )

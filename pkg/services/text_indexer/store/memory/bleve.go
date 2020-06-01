@@ -4,11 +4,11 @@ import (
 	"sync"
 	"time"
 
-	"not_your_fathers_search_engine/pkg/services/text_indexer/index"
 	"github.com/blevesearch/bleve"
 	"github.com/blevesearch/bleve/search/query"
 	"github.com/google/uuid"
 	"golang.org/x/xerrors"
+	"not_your_fathers_search_engine/pkg/services/text_indexer/index"
 )
 
 // The size of each page of results that is cached locally
@@ -18,7 +18,7 @@ const batchSize = 10
 // InMemoryBleveIndexer is an Indexer implementation that uses an in-memory
 // bleve instance to catalogue and search documents.
 type InMemoryBleveIndexer struct {
-	mu sync.RWMutex
+	mu   sync.RWMutex
 	docs map[string]*index.Document
 
 	idx bleve.Index
@@ -44,7 +44,7 @@ func NewInMemoryBleveIndexer() (*InMemoryBleveIndexer, error) {
 	}
 
 	return &InMemoryBleveIndexer{
-		idx: idx,
+		idx:  idx,
 		docs: make(map[string]*index.Document),
 	}, nil
 }
@@ -152,8 +152,8 @@ func copyDoc(d *index.Document) *index.Document {
 
 func makeBleveDoc(d *index.Document) bleveDoc {
 	return bleveDoc{
-		Title: d.Title,
-		Content: d.Content,
+		Title:    d.Title,
+		Content:  d.Content,
 		PageRank: d.PageRank,
 	}
 }

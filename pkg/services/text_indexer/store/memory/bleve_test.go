@@ -3,8 +3,8 @@ package memory
 import (
 	"testing"
 
-	"not_your_fathers_search_engine/pkg/services/text_indexer/index/indextest"
 	gc "gopkg.in/check.v1"
+	"not_your_fathers_search_engine/pkg/services/text_indexer/index/indextest"
 )
 
 var _ = gc.Suite(new(InMemoryBleveTestSuite))

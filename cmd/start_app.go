@@ -42,6 +42,7 @@ func selectConfigFile() string {
 	return env
 }
 
+// InitializeApp initialize environment prior to app starting
 func InitializeApp() {
 	// loads values from config/.env.(current_env) into the system
 	env := selectConfigFile()
@@ -50,14 +51,15 @@ func InitializeApp() {
 	}
 }
 
+// StartApp kick off the application once we load up main function
 func StartApp() {
-	projectId := os.Getenv("project_id")
+	projectID := os.Getenv("project_id")
 
 	// Prints out projectId environment variable
-	fmt.Println(projectId)
+	fmt.Println(projectID)
 
 	rootController := controllers.ExposeDB()
-	defer rootController.DB.DB.Close()
+	defer rootController.DB.Close()
 
 	mux := setupServeMux(rootController)
 	fmt.Println("Listening on: ", 3010)

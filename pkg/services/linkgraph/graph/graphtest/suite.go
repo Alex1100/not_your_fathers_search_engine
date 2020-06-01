@@ -7,10 +7,10 @@ import (
 	"sync"
 	"time"
 
-	"not_your_fathers_search_engine/pkg/services/linkgraph/graph"
 	"github.com/google/uuid"
 	"golang.org/x/xerrors"
 	gc "gopkg.in/check.v1"
+	"not_your_fathers_search_engine/pkg/services/linkgraph/graph"
 )
 
 // SuiteBase defines a re-usable set of graph-related tests that can

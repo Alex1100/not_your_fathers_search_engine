@@ -11,14 +11,19 @@ import (
 	publisher "not_your_fathers_search_engine/pkg/services/publisher"
 )
 
+// CockroachDBGraph provides a way for the links package
+// methods acess the DB
 type CockroachDBGraph struct {
-	db *cockroach.CockroachDBGraph
+	db *cockroach.CockroachGraph
 }
 
-func ExtendDBLinks(db *cockroach.CockroachDBGraph) *CockroachDBGraph {
+// ExtendDBLinks dependency injection for db access
+func ExtendDBLinks(db *cockroach.CockroachGraph) *CockroachDBGraph {
 	return &CockroachDBGraph{db: db}
 }
 
+// SearchLink grabs links and publishes list of links
+// to Google Cloud Pub/Sub
 func (db *CockroachDBGraph) SearchLink(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("HTTP srcURL IS: ", r.URL.Query().Get("srcURL"))
 	srcURL := r.URL.Query().Get("srcURL")
@@ -58,5 +63,4 @@ func (db *CockroachDBGraph) SearchLink(w http.ResponseWriter, r *http.Request) {
 	// }
 	// need to save links in cockroach_db within another application
 	fmt.Println("LINKS PUBLISHED IN GOOGLE CLOUD PLATFORM'S PUB/SUB `upsert_link` TASK")
-	return
 }

@@ -1,4 +1,4 @@
-package elastic_search
+package elasticsearch
 
 import (
 	"bytes"
@@ -79,19 +79,19 @@ func (e esError) Error() string {
 	return fmt.Sprintf("%s: %s", e.Type, e.Reason)
 }
 
-// Compile-time check to ensure ElasticSearchIndexer implements Indexer.
-var _ index.Indexer = (*ElasticSearchIndexer)(nil)
+// Compile-time check to ensure ESIndexer implements Indexer.
+var _ index.Indexer = (*ESIndexer)(nil)
 
-// ElasticSearchIndexer is an Indexer implementation that uses an elastic search
+// ESIndexer is an Indexer implementation that uses an elastic search
 // instance to catalogue and search documents.
-type ElasticSearchIndexer struct {
+type ESIndexer struct {
 	es         *es7.Client
 	refreshOpt func(*esapi.UpdateRequest)
 }
 
-// NewElasticSearchIndexer creates a text indexer that uses an in-memory
+// NewESIndexer creates a text indexer that uses an in-memory
 // bleve instance for indexing documents.
-func NewElasticSearchIndexer(esNodes []string, syncUpdates bool) (*ElasticSearchIndexer, error) {
+func NewESIndexer(esNodes []string, syncUpdates bool) (*ESIndexer, error) {
 	cfg := es7.Config{
 		Addresses: esNodes,
 	}
@@ -109,7 +109,7 @@ func NewElasticSearchIndexer(esNodes []string, syncUpdates bool) (*ElasticSearch
 		refreshOpt = es.Update.WithRefresh("true")
 	}
 
-	return &ElasticSearchIndexer{
+	return &ESIndexer{
 		es:         es,
 		refreshOpt: refreshOpt,
 	}, nil
@@ -117,7 +117,7 @@ func NewElasticSearchIndexer(esNodes []string, syncUpdates bool) (*ElasticSearch
 
 // Index inserts a new document to the index or updates the index entry
 // for and existing document.
-func (i *ElasticSearchIndexer) Index(doc *index.Document) error {
+func (i *ESIndexer) Index(doc *index.Document) error {
 	if doc.LinkID == uuid.Nil {
 		return xerrors.Errorf("index: %w", index.ErrMissingLinkID)
 	}
@@ -148,7 +148,7 @@ func (i *ElasticSearchIndexer) Index(doc *index.Document) error {
 }
 
 // FindByID looks up a document by its link ID.
-func (i *ElasticSearchIndexer) FindByID(linkID uuid.UUID) (*index.Document, error) {
+func (i *ESIndexer) FindByID(linkID uuid.UUID) (*index.Document, error) {
 	var buf bytes.Buffer
 	query := map[string]interface{}{
 		"query": map[string]interface{}{
@@ -177,7 +177,7 @@ func (i *ElasticSearchIndexer) FindByID(linkID uuid.UUID) (*index.Document, erro
 
 // Search the index for a particular query and return back a result
 // iterator.
-func (i *ElasticSearchIndexer) Search(q index.Query) (index.Iterator, error) {
+func (i *ESIndexer) Search(q index.Query) (index.Iterator, error) {
 	var qtype string
 	switch q.Type {
 	case index.QueryTypePhrase:
@@ -218,7 +218,7 @@ func (i *ElasticSearchIndexer) Search(q index.Query) (index.Iterator, error) {
 // UpdateScore updates the PageRank score for a document with the
 // specified link ID. If no such document exists, a placeholder
 // document with the provided score will be created.
-func (i *ElasticSearchIndexer) UpdateScore(linkID uuid.UUID, score float64) error {
+func (i *ESIndexer) UpdateScore(linkID uuid.UUID, score float64) error {
 	var buf bytes.Buffer
 	update := map[string]interface{}{
 		"doc": map[string]interface{}{

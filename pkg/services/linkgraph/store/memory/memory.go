@@ -4,9 +4,9 @@ import (
 	"sync"
 	"time"
 
-	"not_your_fathers_search_engine/pkg/services/linkgraph/graph"
 	"github.com/google/uuid"
 	"golang.org/x/xerrors"
+	"not_your_fathers_search_engine/pkg/services/linkgraph/graph"
 )
 
 // Compile-time check for ensuring InMemoryGraph implements Graph.

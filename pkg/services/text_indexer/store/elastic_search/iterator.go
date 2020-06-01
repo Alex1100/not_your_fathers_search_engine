@@ -1,4 +1,4 @@
-package elastic_search
+package elasticsearch
 
 import (
 	"not_your_fathers_search_engine/pkg/services/text_indexer/index"

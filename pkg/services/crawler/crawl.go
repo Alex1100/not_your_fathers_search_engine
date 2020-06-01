@@ -11,7 +11,8 @@ import (
 	"golang.org/x/net/html"
 )
 
-func isValidUrl(src string) bool {
+// isValidURL checks to see if a Url is valid
+func isValidURL(src string) bool {
 	_, err := url.ParseRequestURI(src)
 	if err != nil {
 		return false
@@ -28,7 +29,7 @@ func isValidUrl(src string) bool {
 // Extract makes an HTTP GET request to the specified URL, parses
 // the response as HTML, and returns the links in the HTML document.
 func Extract(url string) ([]string, error) {
-	if !isValidUrl(url) {
+	if !isValidURL(url) {
 		return nil, fmt.Errorf("url is not a valid protocol: %s", url)
 	}
 	fmt.Println("Calkung it: ", url)
@@ -40,15 +41,24 @@ func Extract(url string) ([]string, error) {
 	if err != nil {
 		return nil, err
 	}
+
 	if resp.StatusCode != http.StatusOK {
-		resp.Body.Close()
 		return nil, fmt.Errorf("getting %s: %s", url, resp.Status)
 	}
 
+	err = resp.Body.Close()
+	if err != nil {
+		return nil, fmt.Errorf("err: %s", err)
+	}
+
 	doc, err := html.Parse(resp.Body)
-	resp.Body.Close()
 	if err != nil {
 		return nil, fmt.Errorf("parsing %s as HTML: %v", url, err)
+	}
+
+	err = resp.Body.Close()
+	if err != nil {
+		return nil, fmt.Errorf("err: %s", err)
 	}
 
 	var links []string
@@ -70,6 +80,8 @@ func Extract(url string) ([]string, error) {
 	return links, nil
 }
 
+// forEachNode enables us to have a helper recursion function
+// to continue crawling nested links
 func forEachNode(n *html.Node, pre, post func(n *html.Node)) {
 	if pre != nil {
 		pre(n)
@@ -93,9 +105,9 @@ func forEachNode(n *html.Node, pre, post func(n *html.Node)) {
 // before a given operation
 // read/write
 // and mu.Unlock()
-
 var tokens = make(chan struct{}, 20000)
 
+// crawl function which extracts all links within a specific site
 func crawl(url string) []string {
 	tokens <- struct{}{} // acquire a token
 	list, err := Extract(url)
@@ -108,6 +120,8 @@ func crawl(url string) []string {
 	return list
 }
 
+// StartCrawlProcess begins the crawling process
+// ETL -> links
 func StartCrawlProcess(srcURL string) []byte {
 	worklist := make(chan []string)  // lists of URL's, may have dups
 	unseenLinks := make(chan string) // deduped URL's
@@ -139,10 +153,10 @@ func StartCrawlProcess(srcURL string) []byte {
 				return linkCollection
 			}
 
-			if !seen[string(link)] && !strings.Contains(string(link), "localhost") {
-				seen[string(link)] = true
-				linkCollection = append(linkCollection, []byte(string(link)+"\n\n")...)
-				unseenLinks <- string(link)
+			if !seen[link] && !strings.Contains(link, "localhost") {
+				seen[link] = true
+				linkCollection = append(linkCollection, []byte(link+"\n\n")...)
+				unseenLinks <- link
 			}
 		}
 	}
