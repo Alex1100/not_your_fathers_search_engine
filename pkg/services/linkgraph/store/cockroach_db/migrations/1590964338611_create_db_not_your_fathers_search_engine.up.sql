@@ -1,0 +1,1 @@
+CREATE DATABASE IF NOT EXISTS not_your_fathers_search_engine;

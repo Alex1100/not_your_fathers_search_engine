@@ -12,7 +12,7 @@ env:
 before_script:
   - curl -O https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-7.4.0-amd64.deb && sudo dpkg -i --force-confnew elasticsearch-7.4.0-amd64.deb && sudo chown -R elasticsearch:elasticsearch /etc/default/elasticsearch && sudo service elasticsearch restart
   - wget -qO- https://binaries.cockroachdb.com/cockroach-v19.1.2.linux-amd64.tgz | tar xvz && cockroach-v19.1.2.linux-amd64/cockroach start --insecure --background --advertise-addr 127.0.0.1:26257
-  - cockroach-v19.1.2.linux-amd64/cockroach sql --insecure -e 'CREATE DATABASE linkgraph;'
+  - cockroach-v19.1.2.linux-amd64/cockroach sql --insecure -e 'CREATE DATABASE not_your_fathers_search_engine;'
   - cd "$GOPATH/src/not_your_fathers_search_engine"
   - sleep 10
 
